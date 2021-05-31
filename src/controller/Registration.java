@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-@WebServlet("/Registration")
+//@WebServlet("/Registration")
  public class Registration extends HttpServlet  {
 	
 /*	protected void doget(HttpServletRequest request ,HttpServletResponse response) throws ServletException,IOException{
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 	
 		try {
-			int partyid=  Integer.parseInt(request.getParameter("partyid"));
+		//	int partyid=  Integer.parseInt(request.getParameter("partyid"));
 			String firstname= request.getParameter("firstname");
 			
 			String lastname= request.getParameter("lastname");
@@ -51,25 +51,32 @@ import javax.servlet.http.HttpServletResponse;
 		
             
 	        
-		     PreparedStatement	prs=  conn.prepareStatement("insert into party " + "values(?,?,?,?,?,?,?,?,?)");
-		     prs.setInt(1,partyid);
-		     prs.setString(2,firstname);
-		     prs.setString(3,lastname);
-		     prs.setString(4,address);
-		     prs.setString(5,city);
-		     prs.setInt(6,zip);
-		     prs.setString(7,state);
-		     prs.setString(8,country);
-		     prs.setInt(9,phone);
+		     PreparedStatement	prs=  conn.prepareStatement("insert into party(firstname,lastname,address,city,zip,state,country,phone) " + "values(?,?,?,?,?,?,?,?)");
+		//     prs.setInt(1,partyid);
+		     prs.setString(1,firstname);
+		     prs.setString(2,lastname);
+		     prs.setString(3,address);
+		     prs.setString(4,city);
+		     prs.setInt(5,zip);
+		     prs.setString(6,state);
+		     prs.setString(7,country);
+		     prs.setInt(8,phone);
+		     prs.executeUpdate();
+		     
+		     PreparedStatement prs3=  conn.prepareStatement("select partyid from party where firstname like ?");
+		     prs3.setString(1, firstname);
+		     ResultSet rs=prs3.executeQuery();
+		     rs.next();
+		     
+		     int partyidf=rs.getInt(1);
+		     System.out.print(partyidf);
 		     
 		     PreparedStatement	prs2=  conn.prepareStatement("insert into userlogin " + "values(?,?,?)");
-		     prs2.setString(1,userloginid);
-		     prs2.setString(2,password);
-		     prs2.setLong(3,partyid);
+		     prs2.setInt(1,partyidf);
+		     prs2.setString(2,userloginid);
+		     prs2.setString(3,password);
 		     
-		     
-		     
-		     prs.executeUpdate();
+		   
 		     prs2.executeUpdate();
 		     
 		     out.println("Inserted");
